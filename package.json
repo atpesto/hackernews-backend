@@ -3,5 +3,35 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Nikhil Arora <narora200@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "git@github.com:atpesto/hackernews-backend.git",
+  "scripts": {
+    "start": "node build",
+    "start:dev": "NODE_ENV=development nodemon src --exec babel-node",
+    "build": "rimraf build && webpack --mode production src/",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "precommit": "lint-staged"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.2.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "husky": "^0.14.3",
+    "jest": "^23.4.2",
+    "lint-staged": "^7.2.0",
+    "nodemon": "^1.18.3",
+    "rimraf": "^2.6.2",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.15.0"
+  }
 }
