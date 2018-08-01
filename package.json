@@ -1,0 +1,7 @@
+{
+  "name": "hackernews-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Nikhil Arora <narora200@gmail.com>",
+  "license": "MIT"
+}
