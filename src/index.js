@@ -1,34 +1,23 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { Prisma } from 'prisma-binding';
 
+import Query from './resolvers/Query';
+import Mutation from './resolvers/Mutation';
+import AuthPayload from './resolvers/AuthPayload';
+
 
 const resolvers = {
-  Query: {
-    info: () => 'This is the API of a Hackernews Clone',
-    feed: (root, args, context, info) => {
-      const { db } = context;
-      return db.query.links({}, info);
-    },
-  },
-
-  Mutation: {
-    post: (root, args, context, info) => {
-      const { db } = context;
-      return (
-        db.mutation.createLink({
-          data: {
-            url: args.url,
-            description: args.description,
-          },
-        }, info)
-      );
-    },
-  },
+  Query,
+  Mutation,
+  AuthPayload,
 };
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  resolverValidationOptions: {
+    requireResolversForResolveType: false,
+  },
   context: req => ({
     ...req,
     db: new Prisma({
