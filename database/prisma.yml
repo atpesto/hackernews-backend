@@ -1,0 +1,8 @@
+endpoint: https://us1.prisma.sh/nikhil-arora-eecdb7/hackernews-clone/prod
+datamodel: datamodel.graphql
+secret: mysecret123
+
+# Deploy hook
+hooks:
+  post-deploy:
+    - graphql get-schema --project database

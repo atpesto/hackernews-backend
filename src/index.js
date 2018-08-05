@@ -1,30 +1,27 @@
 import { GraphQLServer } from 'graphql-yoga';
+import { Prisma } from 'prisma-binding';
 
-
-const links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL',
-}];
-
-let idCount = links.length;
 
 const resolvers = {
   Query: {
     info: () => 'This is the API of a Hackernews Clone',
-    feed: () => links,
+    feed: (root, args, context, info) => {
+      const { db } = context;
+      return db.query.links({}, info);
+    },
   },
 
   Mutation: {
-    // 2
-    post: (root, args) => {
-      const link = {
-        id: `link-${idCount += 1}`,
-        description: args.description,
-        url: args.url,
-      };
-      links.push(link);
-      return link;
+    post: (root, args, context, info) => {
+      const { db } = context;
+      return (
+        db.mutation.createLink({
+          data: {
+            url: args.url,
+            description: args.description,
+          },
+        }, info)
+      );
     },
   },
 };
@@ -32,8 +29,18 @@ const resolvers = {
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: './src/generated/prisma.graphql',
+      endpoint: 'https://us1.prisma.sh/nikhil-arora-eecdb7/hackernews-clone/prod',
+      secret: 'mysecret123',
+      debug: true,
+    }),
+  }),
 });
 
 server.start(() => {
-  console.log('Server is running on http://localhost:4000`');
+  // eslint-disable-next-line no-console
+  console.log('Server is running on http://localhost:4000');
 });
