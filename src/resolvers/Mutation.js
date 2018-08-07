@@ -56,8 +56,34 @@ const post = (parent, args, context, info) => {
   );
 };
 
+const vote = async (parent, args, context, info) => {
+  const { db } = context;
+  const userId = getUserId(context);
+
+  const linkExists = await db.exists.Vote({
+    user: { id: userId },
+    link: { id: args.linkId },
+  });
+
+  if (linkExists) {
+    throw new Error(`Already voted for link: ${args.linkId}`);
+  }
+
+  // 3
+  return db.mutation.createVote(
+    {
+      data: {
+        user: { connect: { id: userId } },
+        link: { connect: { id: args.linkId } },
+      },
+    },
+    info,
+  );
+};
+
 export default {
   signup,
   login,
   post,
+  vote,
 };
