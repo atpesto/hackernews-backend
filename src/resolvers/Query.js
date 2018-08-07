@@ -12,7 +12,7 @@ const feed = (parent, args, context, info) => {
       : {}
   );
 
-  return db.query.links({ where }, info);
+  return db.query.links({ where, skip: args.skip, first: args.first }, info);
 };
 
 export default { feed };
