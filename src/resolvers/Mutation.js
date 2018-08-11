@@ -9,7 +9,10 @@ const signup = async (parent, args, context) => {
   const { db } = context;
 
   const user = await db.mutation.createUser({
-    data: { ...args, password },
+    data: {
+      ...args,
+      password,
+    },
   }, '{ id }');
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
@@ -69,7 +72,6 @@ const vote = async (parent, args, context, info) => {
     throw new Error(`Already voted for link: ${args.linkId}`);
   }
 
-  // 3
   return db.mutation.createVote(
     {
       data: {
